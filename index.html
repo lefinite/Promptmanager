@@ -11,6 +11,9 @@
             --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --success-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            --warning-gradient: linear-gradient(135deg, #fc466b 0%, #3f5efb 100%);
+            --info-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             --dark-gradient: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
             --glass-bg: rgba(255, 255, 255, 0.1);
             --glass-border: rgba(255, 255, 255, 0.2);
@@ -265,49 +268,82 @@
             50% { transform: translateY(-20px) rotate(5deg); }
         }
         
-        /* 功能区域 */
+        /* 功能区域 - 重新设计 */
         .features {
-            padding: 100px 0;
-            background: var(--surface);
+            padding: 120px 0;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            position: relative;
+        }
+        
+        .features::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="0.5" fill="%23667eea" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>') repeat;
+            opacity: 0.3;
+            pointer-events: none;
         }
         
         .section-header {
             text-align: center;
-            max-width: 600px;
-            margin: 0 auto 80px;
+            max-width: 700px;
+            margin: 0 auto 100px;
+            position: relative;
+        }
+        
+        .section-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(244, 147, 251, 0.1));
+            color: #667eea;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            backdrop-filter: blur(10px);
         }
         
         .section-title {
-            font-size: 48px;
+            font-size: clamp(36px, 6vw, 56px);
             font-weight: 800;
-            margin-bottom: 16px;
-            background: var(--dark-gradient);
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            line-height: 1.2;
         }
         
         .section-subtitle {
-            font-size: 18px;
+            font-size: 20px;
             color: var(--text-secondary);
             line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
         }
         
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
             gap: 32px;
+            position: relative;
         }
         
         .feature-card {
             background: var(--surface);
-            border-radius: 24px;
-            padding: 40px;
-            box-shadow: var(--shadow-lg);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid #f1f5f9;
+            border-radius: 28px;
+            padding: 48px 40px;
             position: relative;
             overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 
+                0 4px 20px rgba(0, 0, 0, 0.08),
+                0 1px 3px rgba(0, 0, 0, 0.1);
         }
         
         .feature-card::before {
@@ -316,26 +352,97 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 4px;
-            background: var(--primary-gradient);
+            height: 100%;
+            background: linear-gradient(135deg, 
+                rgba(102, 126, 234, 0.02) 0%, 
+                rgba(244, 147, 251, 0.02) 50%,
+                rgba(79, 172, 254, 0.02) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+        
+        /* 移除横线效果 */
+        .feature-card::after {
+            display: none;
         }
         
         .feature-card:hover {
             transform: translateY(-8px);
-            box-shadow: var(--shadow-2xl);
+            box-shadow: 
+                0 12px 24px rgba(0, 0, 0, 0.1),
+                0 4px 8px rgba(0, 0, 0, 0.06);
+        }
+        
+        .feature-card:hover .feature-icon {
+            transform: scale(1.05);
+        }
+        
+        /* 优化加载动画 - 移除复杂的fade-in效果 */
+        .fade-in {
+            opacity: 1;
+            transform: none;
+        }
+        
+        .feature-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            margin-bottom: 24px;
         }
         
         .feature-icon {
-            width: 64px;
-            height: 64px;
-            border-radius: 16px;
-            background: var(--accent-gradient);
+            width: 72px;
+            height: 72px;
+            border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
-            margin-bottom: 24px;
-            box-shadow: var(--shadow-md);
+            font-size: 32px;
+            position: relative;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:nth-child(1) .feature-icon {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+        }
+        
+        .feature-card:nth-child(2) .feature-icon {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            box-shadow: 0 8px 32px rgba(240, 147, 251, 0.3);
+        }
+        
+        .feature-card:nth-child(3) .feature-icon {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            box-shadow: 0 8px 32px rgba(79, 172, 254, 0.3);
+        }
+        
+        .feature-card:nth-child(4) .feature-icon {
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            box-shadow: 0 8px 32px rgba(17, 153, 142, 0.3);
+        }
+        
+        .feature-card:nth-child(5) .feature-icon {
+            background: linear-gradient(135deg, #fc466b, #3f5efb);
+            box-shadow: 0 8px 32px rgba(252, 70, 107, 0.3);
+        }
+        
+        .feature-card:nth-child(6) .feature-icon {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+        }
+        
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+        
+        .feature-content {
+            flex: 1;
         }
         
         .feature-card h3 {
@@ -343,11 +450,71 @@
             font-weight: 700;
             margin-bottom: 12px;
             color: var(--text-primary);
+            line-height: 1.3;
         }
         
         .feature-card p {
             color: var(--text-secondary);
-            line-height: 1.6;
+            line-height: 1.7;
+            font-size: 16px;
+        }
+        
+        .feature-stats {
+            display: flex;
+            gap: 24px;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid #f1f5f9;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+        
+        /* 简化特殊效果动画 */
+        .feature-card:nth-child(odd) {
+            animation: none;
+        }
+        
+        .feature-card:nth-child(even) {
+            animation: none;
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
         
         /* 演示区域 */
@@ -507,6 +674,16 @@
             .floating-cards {
                 display: none;
             }
+            
+            .feature-header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            
+            .feature-stats {
+                justify-content: center;
+            }
         }
         
         /* 滚动条样式 */
@@ -527,14 +704,13 @@
             background: var(--secondary-gradient);
         }
         
-        /* 加载动画 */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        }
-        
+        /* 移除不必要的动画 */
         @keyframes fadeInUp {
+            /* 保留但简化 */
+            from {
+                opacity: 0.8;
+                transform: translateY(10px);
+            }
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -590,44 +766,68 @@
         <div class="container">
             <div class="section-header fade-in">
                 <h2 class="section-title">强大功能</h2>
-                <p class="section-subtitle">为 AI 提示工程师量身打造的专业工具集，提升您的工作效率</p>
+                <p class="section-subtitle">专为提示词管理设计的功能集合</p>
             </div>
             
             <div class="features-grid">
-                <div class="feature-card fade-in">
-                    <div class="feature-icon">📋</div>
-                    <h3>看板式管理</h3>
-                    <p>直观的看板界面，可视化管理所有提示词文件，版本信息一目了然，让复杂的提示词库变得井然有序</p>
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon">📋</div>
+                        <div class="feature-content">
+                            <h3>看板式管理</h3>
+                            <p>直观的看板界面，可视化管理所有提示词文件</p>
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="feature-card fade-in">
-                    <div class="feature-icon">🔄</div>
-                    <h3>智能迭代</h3>
-                    <p>一键创建新版本，自动继承历史内容，支持版本对比和回滚，让提示词优化变得轻松自然</p>
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon">🔄</div>
+                        <div class="feature-content">
+                            <h3>智能迭代</h3>
+                            <p>一键创建新版本，支持版本对比和回滚</p>
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="feature-card fade-in">
-                    <div class="feature-icon">📋</div>
-                    <h3>快速复制</h3>
-                    <p>单击复制最新版本，直接粘贴到 ChatGPT、Claude 等 AI 平台，无缝集成您的工作流程</p>
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon">📋</div>
+                        <div class="feature-content">
+                            <h3>快速复制</h3>
+                            <p>单击复制最新版本，直接粘贴到 AI 平台</p>
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="feature-card fade-in">
-                    <div class="feature-icon">👀</div>
-                    <h3>实时预览</h3>
-                    <p>卡片式预览提示词内容，支持 Markdown 渲染，无需打开文件即可查看完整摘要</p>
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon">👀</div>
+                        <div class="feature-content">
+                            <h3>实时预览</h3>
+                            <p>卡片式预览提示词内容，支持 Markdown 渲染</p>
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="feature-card fade-in">
-                    <div class="feature-icon">🗂️</div>
-                    <h3>多板组织</h3>
-                    <p>基于文件夹创建多个看板，支持标签分类和搜索过滤，按项目或用途灵活管理</p>
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon">🗂️</div>
+                        <div class="feature-content">
+                            <h3>多板组织</h3>
+                            <p>基于文件夹创建多个看板，支持标签分类和搜索</p>
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="feature-card fade-in">
-                    <div class="feature-icon">⚡</div>
-                    <h3>高效工作流</h3>
-                    <p>完美融入 Obsidian 生态，支持快捷键操作和自定义模板，大幅提升 AI 工作效率</p>
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon">⚡</div>
+                        <div class="feature-content">
+                            <h3>高效工作流</h3>
+                            <p>完美融入 Obsidian 生态，支持快捷键操作</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -726,56 +926,38 @@
             });
         });
 
-        // 滚动动画
+        // 简化滚动动画 - 移除复杂的Intersection Observer
+        // 只保留基本的可见性检测
         const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
+            threshold: 0.3,
+            rootMargin: '0px'
         };
 
         const observer = new IntersectionObserver(function(entries) {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.style.animationDelay = '0.1s';
-                    entry.target.classList.add('fade-in');
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
                 }
             });
         }, observerOptions);
 
-        // 观察所有需要动画的元素
-        document.querySelectorAll('.fade-in').forEach(el => {
+        // 只观察重要元素
+        document.querySelectorAll('.section-header').forEach(el => {
+            el.style.opacity = '0.8';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'all 0.6s ease';
             observer.observe(el);
         });
 
-        // 鼠标跟随效果
-        document.addEventListener('mousemove', function(e) {
-            const cards = document.querySelectorAll('.feature-card, .install-step');
-            cards.forEach(card => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                
-                if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
-                    const centerX = rect.width / 2;
-                    const centerY = rect.height / 2;
-                    const rotateX = (y - centerY) / 10;
-                    const rotateY = (centerX - x) / 10;
-                    
-                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
-                } else {
-                    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)';
-                }
-            });
-        });
-
-        // 页面加载完成后的初始化
+        // 移除复杂的鼠标跟随效果
+        // 页面加载完成后的简化初始化
         window.addEventListener('load', function() {
-            // 移除初始的fade-in类，让动画在滚动时触发
+            // 立即显示所有内容，避免闪烁
             document.querySelectorAll('.fade-in').forEach(el => {
-                el.classList.remove('fade-in');
+                el.style.opacity = '1';
+                el.style.transform = 'none';
             });
-            
-            // 为hero区域立即添加动画
-            document.querySelector('.hero .fade-in').classList.add('fade-in');
         });
     </script>
 </body>
